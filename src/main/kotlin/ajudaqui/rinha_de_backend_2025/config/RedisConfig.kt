@@ -12,38 +12,30 @@ import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
-
-@Suppress("DEPRECATION")
 @Configuration
 open class RedisConfig {
 
-  @Bean
-  open fun jackson2JsonRedisSerializer(): Jackson2JsonRedisSerializer<Any> {
-    val serializer = Jackson2JsonRedisSerializer(Any::class.java)
-    val mapper =
-            ObjectMapper()
-                    .registerModule(JavaTimeModule())
-                    .registerModule(KotlinModule.Builder().build())
-                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-    serializer.setObjectMapper(mapper)
-    return serializer
-  }
+    @Bean
+    open fun objectMapper(): ObjectMapper =
+        ObjectMapper()
+            .registerModule(JavaTimeModule())
+            .registerModule(KotlinModule.Builder().build())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
-  @Bean
-  open fun reactiveRedisTemplate(
-          factory: ReactiveRedisConnectionFactory,
-          jackson2JsonRedisSerializer: Jackson2JsonRedisSerializer<Any>
-  ): ReactiveRedisTemplate<String, Payments> {
-    @Suppress("UNCHECKED_CAST")
-    val serializer = jackson2JsonRedisSerializer as Jackson2JsonRedisSerializer<Payments>
+    @Bean
+    open fun reactiveRedisTemplate(
+        factory: ReactiveRedisConnectionFactory,
+        objectMapper: ObjectMapper
+    ): ReactiveRedisTemplate<String, Payments> {
 
-    val context =
-            RedisSerializationContext.newSerializationContext<String, Payments>(
-                            StringRedisSerializer()
-                    )
-                    .value(serializer)
-                    .build()
+        val serializer = Jackson2JsonRedisSerializer(objectMapper, Payments::class.java)
 
-    return ReactiveRedisTemplate(factory, context)
-  }
+        val context = RedisSerializationContext
+            .newSerializationContext<String, Payments>(StringRedisSerializer())
+            .value(serializer)
+            .build()
+
+        return ReactiveRedisTemplate(factory, context)
+    }
 }
+
