@@ -1,8 +1,10 @@
 package ajudaqui.rinha_de_backend_2025.repository
 
-import org.springframework.data.repository.CrudRepository
-import org.springframework.stereotype.Repository
 import ajudaqui.rinha_de_backend_2025.entity.Payments
+import java.time.Instant
 
-@Repository
-interface PaymentsRepository: CrudRepository<Payments, Long>
+interface PaymentsRepository {
+  suspend fun save(payment: Payments): Payments
+  suspend fun findById(id: String): Payments?
+  suspend fun findByPeriod(from: Instant, to: Instant): List<Payments>
+}

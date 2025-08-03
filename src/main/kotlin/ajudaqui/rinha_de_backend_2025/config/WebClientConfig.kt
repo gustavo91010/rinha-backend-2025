@@ -6,8 +6,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory
+import org.springframework.data.redis.core.ReactiveRedisTemplate
+import org.springframework.data.redis.serializer.StringRedisSerializer
 import reactor.netty.http.client.HttpClient
 import reactor.netty.resources.ConnectionProvider
+import ajudaqui.rinha_de_backend_2025.entity.Payments
 
 @Configuration
 open class WebClientConfig {
@@ -37,4 +41,16 @@ open class WebClientConfig {
                   .clientConnector(ReactorClientHttpConnector(httpClient()))
                   .baseUrl(fallbackUrl)
                   .build()
+
+//                     @Bean
+//    open fun reactiveRedisTemplate(
+//        factory: ReactiveRedisConnectionFactory
+//    ): ReactiveRedisTemplate<String, Payments> {
+//        val serializationContext = RedisSerializationContext
+//            .newSerializationContext<String, Payments>(StringRedisSerializer())
+//            .hashValue(PaymentsRedisSerializer()) // você pode criar um serializer customizado para Payments
+//            .value(PaymentsRedisSerializer())
+//            .build()
+//        return ReactiveRedisTemplate(factory, serializationContext)
+//    }
 }
