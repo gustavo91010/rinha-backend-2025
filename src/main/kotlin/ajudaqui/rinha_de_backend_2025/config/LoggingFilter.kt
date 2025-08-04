@@ -15,7 +15,7 @@ class LoggingWebFilter : WebFilter {
   override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> {
     val request = exchange.request
     val method = request.method
-    val uri = request.uri
+    val uri = request.uri.path
 
     logger.info("[$method] | $uri")
 

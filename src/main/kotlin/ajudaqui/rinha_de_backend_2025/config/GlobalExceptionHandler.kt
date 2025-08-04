@@ -8,11 +8,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
-    val logger = LoggerFactory.getLogger(javaClass)
+  val logger = LoggerFactory.getLogger(javaClass)
 
-    @ExceptionHandler(Exception::class)
-    fun handleAllExceptions(ex: Exception): ResponseEntity<String> {
-        logger.error("Erro interno: ${ex.message} code: ${HttpStatus.INTERNAL_SERVER_ERROR}")
-        return ResponseEntity("Erro interno: ${ex.message}", HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+  @ExceptionHandler(Exception::class)
+  fun handleAllExceptions(ex: Exception): ResponseEntity<Map<String, String>> {
+    logger.error("Erro interno: ${ex.message} code: ${HttpStatus.INTERNAL_SERVER_ERROR}")
+    return ResponseEntity(
+            mapOf("Erro interno:" to "${ex.message}"),
+            HttpStatus.INTERNAL_SERVER_ERROR
+    )
+  }
 }

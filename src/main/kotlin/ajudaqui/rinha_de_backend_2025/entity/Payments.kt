@@ -9,5 +9,6 @@ import org.springframework.data.redis.core.RedisHash
 data class Payments(
         @Id val correlationId: String,
         val amount: BigDecimal,
+        val default: Boolean,
         val createdAt: Instant? = Instant.now()
 )
