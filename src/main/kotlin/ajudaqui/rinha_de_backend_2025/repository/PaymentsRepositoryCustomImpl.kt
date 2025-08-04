@@ -23,7 +23,7 @@ open class PaymentsRepositoryCustomImpl(
         redisTemplate.opsForValue().set(payment.correlationId, payment).awaitSingle()
         redisTemplate
             .opsForZSet()
-            .add(KEY, payment, payment.createdAt?.toEpochMilli()?.toDouble() ?: 0.0)
+            .add(KEY, payment, payment.requestedAt?.toEpochMilli()?.toDouble() ?: 0.0)
             .awaitSingle()
         return payment
     }
