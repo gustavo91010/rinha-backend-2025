@@ -56,26 +56,19 @@ class PaymentsService(
                   trySendPaymentProcessors(dto, false) -> false
                   else -> null
                 }
-        if (selector == null) {
+        if (selector != null) {
+          savePayments(selector, dto)
+        } else {
           delay(500)
           channel.send(dto)
-        } else {
-          savePayments(selector, dto)
         }
-        // val sent = trySendPaymentProcessors(dto, true) || trySendPaymentProcessors(dto, false)
-        // if (!sent) {
-        //   delay(500)
-        //   channel.send(dto)
-        // }
       }
     }
   }
 
   private suspend fun trySendPaymentProcessors(dto: PaymentDto, selector: Boolean): Boolean {
     return try {
-      val response = paymentProcessors.postPayment(dto, selector).awaitSingle()
-      // if (response) savePayments(selector, dto)
-      response
+      paymentProcessors.postPayment(dto, selector).awaitSingle()
     } catch (e: Exception) {
       false
     }
