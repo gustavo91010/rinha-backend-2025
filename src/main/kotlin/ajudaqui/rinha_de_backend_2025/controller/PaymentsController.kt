@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 class PaymentsController(val paymentsSerivce: PaymentsService) {
 
   @PostMapping("")
-  suspend fun recived(@RequestBody paymentDto: PaymentDto): ResponseEntity<Payments> =
+  suspend fun recived(@RequestBody paymentDto: PaymentDto): ResponseEntity<Map<String, String>> =
           ResponseEntity.ok(paymentsSerivce.recived(paymentDto))
 
   @PostMapping("/default/{default}")
