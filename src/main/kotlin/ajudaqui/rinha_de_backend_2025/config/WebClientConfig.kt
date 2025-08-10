@@ -42,15 +42,4 @@ open class WebClientConfig {
                   .baseUrl(fallbackUrl)
                   .build()
 
-//                     @Bean
-//    open fun reactiveRedisTemplate(
-//        factory: ReactiveRedisConnectionFactory
-//    ): ReactiveRedisTemplate<String, Payments> {
-//        val serializationContext = RedisSerializationContext
-//            .newSerializationContext<String, Payments>(StringRedisSerializer())
-//            .hashValue(PaymentsRedisSerializer()) // você pode criar um serializer customizado para Payments
-//            .value(PaymentsRedisSerializer())
-//            .build()
-//        return ReactiveRedisTemplate(factory, serializationContext)
-//    }
 }

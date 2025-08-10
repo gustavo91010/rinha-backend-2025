@@ -1,21 +1,35 @@
+version: '3.8'
+
 services:
   app1:
-    image: docker.io/gustavopaes/rinha-backend-25:1.0.0
+    image: docker.io/gustavodocker910/rinha-backend-25:1.0.9
+    environment:
+      - JAVA_OPTS=-Xmx128m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ParallelRefProcEnabled
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+    depends_on:
+      - redis
     deploy:
       resources:
         limits:
-          cpus: "0.15"
-          memory: "42MB"
+          cpus: "0.6"
+          memory: "150MB"
     networks:
       - app-network
 
   app2:
-    image: docker.io/gustavopaes/rinha-backend-25:1.0.0
+    image: docker.io/gustavodocker910/rinha-backend-25:1.0.9
+    environment:
+      - JAVA_OPTS=-Xmx128m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ParallelRefProcEnabled
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+    depends_on:
+      - redis
     deploy:
       resources:
         limits:
-          cpus: "0.15"
-          memory: "42MB"
+          cpus: "0.6"
+          memory: "150MB"
     networks:
       - app-network
 
@@ -25,6 +39,23 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "9999:9999"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.15"
+          memory: "25MB"
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.15"
+          memory: "25MB"
     networks:
       - app-network
 
