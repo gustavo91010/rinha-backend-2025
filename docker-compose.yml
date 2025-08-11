@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app1:
-    image: docker.io/gustavodocker910/rinha-backend-25:1.0.9
+    image: docker.io/gustavodocker910/rinha-backend-25:1.0.13
     environment:
       - JAVA_OPTS=-Xmx128m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ParallelRefProcEnabled
       - SPRING_REDIS_HOST=redis
@@ -18,7 +18,7 @@ services:
       - app-network
 
   app2:
-    image: docker.io/gustavodocker910/rinha-backend-25:1.0.9
+    image: docker.io/gustavodocker910/rinha-backend-25:1.0.13
     environment:
       - JAVA_OPTS=-Xmx128m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ParallelRefProcEnabled
       - SPRING_REDIS_HOST=redis

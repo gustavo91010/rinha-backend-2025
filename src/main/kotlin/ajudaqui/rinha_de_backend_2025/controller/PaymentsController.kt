@@ -6,13 +6,7 @@ import ajudaqui.rinha_de_backend_2025.entity.Payments
 import ajudaqui.rinha_de_backend_2025.service.PaymentsService
 import java.time.Instant
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/payments")
@@ -38,9 +32,9 @@ class PaymentsController(val paymentsSerivce: PaymentsService) {
           @RequestParam to: Instant
   ): ResponseEntity<List<Payments>> = ResponseEntity.ok(paymentsSerivce.findByPeriod(from, to))
 
-  @GetMapping("/payments-summary")
-  suspend fun summary(
-          @RequestParam from: Instant,
-          @RequestParam to: Instant
-  ): ResponseEntity<SummaryDto> = ResponseEntity.ok(paymentsSerivce.summary(from, to))
+  // @GetMapping("/payments-summary")
+  // suspend fun summary(
+  //         @RequestParam from: Instant,
+  //         @RequestParam to: Instant
+  // ): ResponseEntity<SummaryDto> = ResponseEntity.ok(paymentsSerivce.summary(from, to))
 }
