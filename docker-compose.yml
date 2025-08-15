@@ -2,34 +2,50 @@ version: '3.8'
 
 services:
   app1:
-    image: docker.io/gustavodocker910/rinha-backend-25:1.0.13
+    restart: always
+    # image: docker.io/gustavodocker910/rinha-backend-25:1.0.17
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rinha-backend-local:1.0.0
+    hostname: app1
     environment:
       - JAVA_OPTS=-Xmx128m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ParallelRefProcEnabled
       - SPRING_REDIS_HOST=redis
       - SPRING_REDIS_PORT=6379
+      - INSTANCE_ID=API-1
     depends_on:
-      - redis
-    deploy:
-      resources:
-        limits:
-          cpus: "0.6"
-          memory: "150MB"
+      redis:
+        condition: service_healthy
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "0.55"
+    #       memory: "155MB"
     networks:
       - app-network
 
   app2:
-    image: docker.io/gustavodocker910/rinha-backend-25:1.0.13
+    restart: always
+    # image: docker.io/gustavodocker910/rinha-backend-25:1.0.17
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rinha-backend-local:1.0.0
+    hostname: app2
     environment:
       - JAVA_OPTS=-Xmx128m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ParallelRefProcEnabled
       - SPRING_REDIS_HOST=redis
       - SPRING_REDIS_PORT=6379
+      - INSTANCE_ID=API-2
     depends_on:
-      - redis
-    deploy:
-      resources:
-        limits:
-          cpus: "0.6"
-          memory: "150MB"
+      redis:
+        condition: service_healthy
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "0.55"
+    #       memory: "155MB"
     networks:
       - app-network
 
@@ -39,26 +55,119 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "9999:9999"
+    depends_on:
+      - app1
+      - app2
     deploy:
       resources:
         limits:
           cpus: "0.15"
-          memory: "25MB"
+          memory: "15MB"
     networks:
       - app-network
 
   redis:
-    image: redis:7
-    ports:
-      - "6379:6379"
+    image: redis:7.2-alpine
+    # ports:
+    #   - "6379:6379"  # usar apenas em desenvolvimento local
+    volumes:
+      - redis-data:/data
+    command: redis-server --save "" --appendonly no --maxclients 20000
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     deploy:
       resources:
         limits:
-          cpus: "0.15"
-          memory: "25MB"
+          cpus: "0.25"
+          memory: "275MB"
     networks:
       - app-network
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  redis-data:
+
+# version: '3.8'
+
+# services:
+#   app1:
+#     restart: always
+#     image: docker.io/gustavodocker910/rinha-backend-25:1.0.16
+#     # build:
+#     #   context: .
+#     #   dockerfile: Dockerfile
+#     # image: rinha-backend-local:1.0.0
+#     environment:
+#       - JAVA_OPTS=-Xmx128m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ParallelRefProcEnabled
+#       - SPRING_REDIS_HOST=redis
+#       - SPRING_REDIS_PORT=6379
+#     depends_on:
+#       - redis
+#     deploy:
+#       # resources:
+#       #   limits:
+#           # cpus: "0.6"
+#           # memory: "155MB"
+#     networks:
+#       - app-network
+
+#   app2:
+#     restart: always
+#     image: docker.io/gustavodocker910/rinha-backend-25:1.0.16
+#     # build:
+#     #   context: .
+#     #   dockerfile: Dockerfile
+#     # image: rinha-backend-local:1.0.0
+#     environment:
+#       - JAVA_OPTS=-Xmx128m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ParallelRefProcEnabled
+#       - SPRING_REDIS_HOST=redis
+#       - SPRING_REDIS_PORT=6379
+#     depends_on:
+#       - redis
+#     deploy:
+#       # resources:
+#       #   limits:
+#           # cpus: "0.6"
+#           # memory: "155MB"
+#     networks:
+#       - app-network
+
+#   nginx:
+#     image: nginx:alpine
+#     volumes:
+#       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+#     ports:
+#       - "9999:9999"
+#     deploy:
+#       resources:
+#         limits:
+#           cpus: "0.15"
+#           memory: "15MB"
+#     networks:
+#       - app-network
+
+#   redis:
+#     image: redis:7
+#     ports:
+#       - "6379:6379"
+#     volumes:
+#       - redis-data:/data
+#     deploy:
+#       resources:
+#         limits:
+#           cpus: "0.15"
+#           memory: "25MB"
+#     networks:
+#       - app-network
+
+# networks:
+#   app-network:
+#     driver: bridge
+# volumes:
+#   redis-data:
