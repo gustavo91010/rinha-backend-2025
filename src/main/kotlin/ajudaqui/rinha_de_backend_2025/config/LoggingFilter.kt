@@ -7,7 +7,7 @@ import org.springframework.web.server.WebFilter
 import org.springframework.web.server.WebFilterChain
 import reactor.core.publisher.Mono
 
-@Component
+// @Component
 class LoggingWebFilter : WebFilter {
 
   private val logger = LoggerFactory.getLogger(LoggingWebFilter::class.java)

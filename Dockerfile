@@ -19,14 +19,6 @@ RUN chmod +x ./app
 
 EXPOSE 8080
 CMD ["./app"]
-# # Run stage leve
-# FROM alpine:3.18
-# WORKDIR /app
-
-# COPY --from=build /app/target/rinha-de-backend-2025 app
-
-# EXPOSE 8080
-# CMD ["./app"]
 
 
 

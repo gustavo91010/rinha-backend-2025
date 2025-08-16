@@ -1,7 +1,6 @@
 package ajudaqui.rinha_de_backend_2025.controller
 
 import ajudaqui.rinha_de_backend_2025.dto.PaymentDto
-import ajudaqui.rinha_de_backend_2025.dto.SummaryDto
 import ajudaqui.rinha_de_backend_2025.entity.Payments
 import ajudaqui.rinha_de_backend_2025.service.PaymentsService
 import java.time.Instant
@@ -14,7 +13,8 @@ class PaymentsController(val paymentsSerivce: PaymentsService) {
 
   @PostMapping("")
   suspend fun recived(@RequestBody paymentDto: PaymentDto): ResponseEntity<Map<String, String>> =
-          ResponseEntity.ok(paymentsSerivce.recived(paymentDto))
+          // ResponseEntity.ok(paymentsSerivce.recived(paymentDto))
+          ResponseEntity.ok(paymentsSerivce.saveFirst(paymentDto))
 
   @PostMapping("/default/{default}")
   suspend fun recivedTest(
