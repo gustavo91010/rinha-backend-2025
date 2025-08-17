@@ -1,4 +1,4 @@
-./gustavo-paes-kotlin/*
+!**/gustavo-paes-kotlin/*
 .kls_database.db
 .docker-compose.yml
 .env
