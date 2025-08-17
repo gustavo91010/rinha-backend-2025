@@ -1,3 +1,6 @@
+.gustavo-paes-kotlin/*
+.kls_database.db
+.docker-compose.yml
 .env
 HELP.md
 target/
