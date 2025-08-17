@@ -13,6 +13,7 @@ class GlobalExceptionHandler {
   @ExceptionHandler(Exception::class)
   fun handleAllExceptions(ex: Exception): ResponseEntity<Map<String, String>> {
     logger.error("Erro interno: ${ex.message} code: ${HttpStatus.INTERNAL_SERVER_ERROR}")
+    ex.printStackTrace()
     return ResponseEntity(
             mapOf("Erro interno:" to "${ex.message}"),
             HttpStatus.INTERNAL_SERVER_ERROR
