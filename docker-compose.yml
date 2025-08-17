@@ -44,7 +44,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.55"
+          cpus: "0.60"
           memory: "130MB"
     networks:
       - payment-processor
@@ -61,7 +61,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.15"
+          cpus: "0.60"
           memory: "15MB"
     networks:
       - payment-processor
@@ -81,7 +81,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.3"
+          cpus: "0.15"
           memory: "75MB"
     healthcheck:
       test: ["CMD-SHELL", "redis-cli -h 127.0.0.1 ping || exit 1"]

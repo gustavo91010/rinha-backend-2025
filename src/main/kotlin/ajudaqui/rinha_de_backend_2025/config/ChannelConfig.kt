@@ -11,5 +11,4 @@ open class ChannelConfig {
 
   @Bean
   open fun paymentChannel(): Channel<PaymentTask> = Channel(capacity = Channel.UNLIMITED)
-  // open fun paymentChannel(): Channel<PaymentDto> = Channel(capacity = Channel.UNLIMITED)
 }

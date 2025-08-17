@@ -21,9 +21,9 @@ open class WebClientConfig {
 
   private fun connectionProvider() =
           ConnectionProvider.builder("custom")
-                  .maxConnections(100)
+                  .maxConnections(1000)
                   .pendingAcquireMaxCount(10000)
-                  .pendingAcquireTimeout(Duration.ofSeconds(30))
+                  .pendingAcquireTimeout(Duration.ofSeconds(60))
                   .build()
 
   private fun httpClient() = HttpClient.create(connectionProvider()).keepAlive(false).compress(true)

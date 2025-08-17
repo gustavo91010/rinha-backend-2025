@@ -28,32 +28,23 @@ class PaymentsService(
   suspend fun recivedTest(default: Boolean, paymentDto: PaymentDto): Payments =
           savePayments(default, paymentDto)
 
-  suspend fun saveFirst(dto: PaymentDto): Map<String, String> =
-          mapOf("message" to "pagamento recebido").also { channel.send(PaymentTask(dto, Instant.now())) }
+  suspend fun saveFirst(dto: PaymentDto): Map<String, String> {
+
+    channel.send(PaymentTask(dto, Instant.now()))
+    return mapOf("message" to "pagamento recebido")
+  }
 
   suspend fun recived(dto: PaymentDto): Map<String, String> =
           mapOf("message" to "pagamento recebido").also {
             channel.send(PaymentTask(dto, Instant.now()))
           }
 
-  private suspend fun savePayments(
-          default: Boolean,
-          paymentDto: PaymentDto,
-          requestedAt: Instant? = Instant.now()
-  ): Payments =
-          repository.save(
-                  Payments(
-                          correlationId = paymentDto.correlationId,
-                          amount = paymentDto.amount,
-                          requestedAt = requestedAt,
-                          default = default
-                  )
-          )
-
   fun startProcessing() {
-    CoroutineScope(Dispatchers.IO).launch {
-      for (task in channel) {
-        callProcessor(task.dto, task.time)
+    repeat(3) {
+      CoroutineScope(Dispatchers.IO).launch {
+        for (task in channel) {
+          callProcessor(task.dto, task.time)
+        }
       }
     }
   }
@@ -76,9 +67,24 @@ class PaymentsService(
     return try {
       paymentProcessors.postPayment(dto, selector).awaitSingle()
     } catch (e: Exception) {
+      e.printStackTrace()
       false
     }
   }
+
+  private suspend fun savePayments(
+          default: Boolean,
+          paymentDto: PaymentDto,
+          requestedAt: Instant? = Instant.now()
+  ): Payments =
+          repository.save(
+                  Payments(
+                          correlationId = paymentDto.correlationId,
+                          amount = paymentDto.amount,
+                          requestedAt = requestedAt,
+                          default = default
+                  )
+          )
 
   suspend fun findById(paymentId: String): Payments? =
           repository.findById(paymentId) ?: throw ClassNotFoundException("Pagamento não localizado")
