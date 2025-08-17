@@ -21,7 +21,7 @@ services:
       resources:
         limits:
           cpus: "0.55"
-          memory: "155MB"
+          memory: "130MB"
     networks:
       - payment-processor
 
@@ -45,7 +45,7 @@ services:
       resources:
         limits:
           cpus: "0.55"
-          memory: "155MB"
+          memory: "130MB"
     networks:
       - payment-processor
 
@@ -82,7 +82,7 @@ services:
       resources:
         limits:
           cpus: "0.3"
-          memory: "100MB"
+          memory: "75MB"
     healthcheck:
       test: ["CMD-SHELL", "redis-cli -h 127.0.0.1 ping || exit 1"]
       interval: 5s

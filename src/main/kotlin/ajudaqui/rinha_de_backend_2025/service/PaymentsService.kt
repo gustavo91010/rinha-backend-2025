@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactor.awaitSingle
-import kotlinx.coroutines.delay
 import org.slf4j.LoggerFactory
 import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.stereotype.Service
@@ -30,7 +29,7 @@ class PaymentsService(
           savePayments(default, paymentDto)
 
   suspend fun saveFirst(dto: PaymentDto): Map<String, String> =
-          mapOf("message" to "pagamento recebido").also { callProcessor(dto, Instant.now()) }
+          mapOf("message" to "pagamento recebido").also { channel.send(PaymentTask(dto, Instant.now())) }
 
   suspend fun recived(dto: PaymentDto): Map<String, String> =
           mapOf("message" to "pagamento recebido").also {
@@ -69,7 +68,6 @@ class PaymentsService(
     if (selector != null) {
       savePayments(selector, dto, time)
     } else {
-      delay(1000)
       channel.send(PaymentTask(dto, time))
     }
   }
